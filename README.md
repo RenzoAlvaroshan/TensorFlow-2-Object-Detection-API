@@ -8,7 +8,8 @@ Source: https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/lates
 Taken using Logitech Brio 4K Pro
 
 Image:
-<img width="1213" alt="Screen Shot 2021-07-25 at 10 41 19" src="https://user-images.githubusercontent.com/55566616/126887017-1eb40c48-0b1b-45fb-bbe8-9e6f8b683072.png">
+
+![image](https://user-images.githubusercontent.com/55566616/127762079-5c45bfe7-bcef-4849-b711-abb83e4f6b99.jpeg)
 
 
 Video:
