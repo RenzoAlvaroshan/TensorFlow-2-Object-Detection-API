@@ -71,6 +71,7 @@ TensorFlow/
 ```
 
 ### Protobuf Installation/Compilation
+
 * Head to the protoc releases page
 * Download the latest protoc-*-*.zip release (e.g. protoc-3.12.3-win64.zip for 64-bit Windows)
 * Extract the contents of the downloaded protoc-*-*.zip in a directory <PATH_TO_PB> of your choice (e.g. C:\Program Files\Google Protobuf)
@@ -229,7 +230,7 @@ item {
 }
 ```
 
-*assume renzo and adriano is two different person
+*assume renzo and adriano are two different person
 
 ### Create TensorFlow Records
 
@@ -255,4 +256,96 @@ python generate_tfrecord.py -x [PATH_TO_IMAGES_FOLDER]/test -l [PATH_TO_ANNOTATI
 # python generate_tfrecord.py -x C:/Users/renzo/Tensorflow/workspace/training_demo/images/train -l C:/Users/renzo/Tensorflow/workspace/training_demo/annotations/label_map.pbtxt -o C:/Users/renzo/Documents/Tensorflow/workspace/training_demo/annotations/train.record
 
 # python generate_tfrecord.py -x C:/Users/renzo/Tensorflow/workspace/training_demo/images/train -l C:/Users/renzo/Tensorflow/workspace/training_demo/annotations/label_map.pbtxt -o C:/Users/renzo/Documents/Tensorflow/workspace/training_demo/annotations/test.record
+```
+
+### Configure the Training Pipeline
+
+Now that we have downloaded and extracted our pre-trained model, let’s create a directory for our training job. Under the `training_demo/models` create a new directory named `my_ssd_resnet50_v1_fpn` and copy the `training_demo/pre-trained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/pipeline.config` file inside the newly created directory. Our `training_demo/models` directory should now look like this:
+
+```
+training_demo/
+├─ ...
+├─ models/
+│  └─ my_ssd_resnet50_v1_fpn/
+│     └─ pipeline.config
+└─ ...
+```
+
+Now, let’s have a look at the changes that we shall need to apply to the pipeline.config file (highlighted in yellow):
+
+<img width="697" alt="fixed_shape_resizer" src="https://user-images.githubusercontent.com/55566616/128580374-a2b03518-386e-4d23-b14b-4dca93ec59c9.png">
+
+<img width="697" alt="y scale 10 0" src="https://user-images.githubusercontent.com/55566616/128580375-6b1777a3-8f1c-42b6-aeb2-79c3c72a0354.png">
+
+<img width="697" alt="depth 256" src="https://user-images.githubusercontent.com/55566616/128580378-53500e3b-a164-4f4d-95dd-777e7cdfc9ce.png">
+
+<img width="697" alt="classification weight 1 0" src="https://user-images.githubusercontent.com/55566616/128580382-f446f935-9c91-4007-9584-ddd2a3afcab3.png">
+
+<img width="697" alt="164 replicas_to_aggregate" src="https://user-images.githubusercontent.com/55566616/128580384-2f36761d-cab7-458d-a9bc-0b8d25bf3956.png">
+
+
+It is worth noting here that the changes to lines 178 to 179 above are optional. These should only be used if you installed the COCO evaluation tools, as outlined in the COCO API installation section, and you intend to run evaluation (see Evaluating the Model (Optional)).
+Once the above changes have been applied to our config file, go ahead and save it.
+
+
+### Training the Model
+
+Before we begin training our model, let’s go and copy the `TensorFlow/models/research/object_detection/model_main_tf2.py` script and paste it straight into our  `training_demo` folder. We will need this script in order to train our model.
+
+Now, to initiate a new training job, open a new Terminal, cd inside the training_demo folder and run the following command:
+
+```python
+python model_main_tf2.py --model_dir=models/my_ssd_resnet50_v1_fpn --pipeline_config_path=models/my_ssd_resnet50_v1_fpn/pipeline.config
+```
+
+Once the training process has been initiated, you should see a series of print outs similar to the one below (plus/minus some warnings):
+
+### Monitor Training Job Progress using TensorBoard
+
+A very nice feature of TensorFlow, is that it allows you to coninuously monitor and visualise a number of different training/evaluation metrics, while your model is being trained. The specific tool that allows us to do all that is Tensorboard.
+To start a new TensorBoard server, we follow the following steps:
+* Open a new Anaconda/Command Prompt
+* Activate your TensorFlow conda environment (if you have one), e.g.:
+
+```
+activate tensorflow_gpu
+```
+
+* `cd` into the `training_demo` folder.
+* Run the following command:
+```
+tensorboard --logdir=models/my_ssd_resnet50_v1_fpn
+```
+
+The above command will start a new TensorBoard server, which (by default) listens to port 6006 of your machine. Assuming that everything went well, you should see a print-out similar to the one below (plus/minus some warnings):
+
+```
+...
+TensorBoard 2.2.2 at http://localhost:6006/ (Press CTRL+C to quit)
+```
+
+Once this is done, go to your browser and type `http://localhost:6006/` in your address bar, following which you should be presented with a dashboard similar to the one shown below (maybe less populated if your model has just started training):
+
+
+### Exporting a Trained Model
+
+Once your training job is complete, you need to extract the newly trained inference graph, which will be later used to perform the object detection. This can be done as follows:
+* Copy the `TensorFlow/models/research/object_detection/exporter_main_v2.py` script and paste it straight into your `training_demo` folder.
+* Now, open a Terminal, `cd` inside your training_demo folder, and run the following command:
+
+```
+python .\exporter_main_v2.py --input_type image_tensor --pipeline_config_path .\models\my_efficientdet_d1\pipeline.config --trained_checkpoint_dir .\models\my_efficientdet_d1\ --output_directory .\exported-models\my_model
+```
+
+After the above process has completed, you should find a new folder `my_model` under the `training_demo/exported-models` that has the following structure:
+
+```
+training_demo/
+├─ ...
+├─ exported-models/
+│  └─ my_model/
+│     ├─ checkpoint/
+│     ├─ saved_model/
+│     └─ pipeline.config
+└─ ...
 ```
