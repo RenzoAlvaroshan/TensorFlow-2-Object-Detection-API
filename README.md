@@ -26,7 +26,7 @@ https://user-images.githubusercontent.com/55566616/126886984-cc2fdf0b-5752-4a7e-
 Open a new Terminal window
 Type the following command:
 
-```python
+```
 C:\Users\renzo>conda create -n tensorflow pip python=3.8
 ```
 
