@@ -142,7 +142,9 @@ Capturing images
 1. Prepare your webcamera (e.g. Logitech Brio 4K Pro)
 2. Run capture_image.py
 
-python capture_image.py
+```
+(tensorflow) C:\Users\renzo>python capture_image.py
+```
 
 3. Capture face images from different angles
 
