@@ -137,7 +137,7 @@ training_demo/
 └─ README.md
 ```
 
-Capturing images
+### Capturing images
 
 1. Prepare your webcamera (e.g. Logitech Brio 4K Pro)
 2. Run capture_image.py
