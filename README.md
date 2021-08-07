@@ -370,7 +370,10 @@ training_demo/
 python Object_Detection_Videos.py
 ```
 
+Now you can see the result like the sample result above.
+
 Congratulations! 👏
+
 You have just finished creating your own custom object detector using Tensorflow Object Detection API.
 
-Thank you to all elements that helped me making this guidebook 🙏
+Thank you to all people that helped me making this guidebook 🙏
