@@ -49,7 +49,7 @@ Once you have activated your virtual environment, the name of the environment sh
 TensorFlow Installation
 
 ```
-pip install --ignore-installed --upgrade tensorflow==2.5.0
+pip install --ignore-installed --upgrade tensorflow==2.4.0
 ```
 
 TensorFlow Object Detection API Installation
