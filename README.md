@@ -19,11 +19,10 @@ Video:
 
 https://user-images.githubusercontent.com/55566616/126886984-cc2fdf0b-5752-4a7e-980e-63783f4612da.mp4
 
-## Prerequisite
 
-### Installation
+## Installation
 
-### Create a new Anaconda virtual environment
+### 1. Create a new Anaconda virtual environment
 
 Open a new Terminal window
 Type the following command:
@@ -34,7 +33,7 @@ C:\Users\renzo>conda create -n tensorflow pip python=3.8
 
 The above will create a new virtual environment with name tensorflow
 
-### Activate the Anaconda virtual environment
+### 2. Activate the Anaconda virtual environment
 
 ```
 C:\Users\renzo>conda activate tensorflow
@@ -72,7 +71,7 @@ TensorFlow/
    └── ...
 ```
 
-### Protobuf Installation/Compilation
+### 3. Protobuf Installation/Compilation
 
 * Head to the protoc releases page
 * Download the latest protoc-*-*.zip release (e.g. protoc-3.12.3-win64.zip for 64-bit Windows)
@@ -91,7 +90,7 @@ COCO API installation
 (tensorflow) C:\Users\renzo>pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 ```
 
-### Install the Object Detection API
+### 4. Install the Object Detection API
 
 ```python
 # From within TensorFlow/models/research/
@@ -107,7 +106,7 @@ To test the installation, run the following command from within Tensorflow\model
 python object_detection/builders/model_builder_tf2_test.py
 ```
 
-### Training Custom Object Detector
+## Training Custom Object Detector
 
 create a new folder under TensorFlow and call it workspace. It is within the workspace that we will store all our training set-ups. Now let’s go under workspace and create another folder named training_demo. Now our directory structure should be as so:
 
@@ -139,7 +138,7 @@ training_demo/
 └─ README.md
 ```
 
-### Capturing images
+### 1. Capturing images
 
 1. Prepare your webcamera (e.g. Logitech Brio 4K Pro)
 2. Run capture_image.py
@@ -161,7 +160,7 @@ in total we can get 431 pictures
 
 Save it into your images folder
 
-### Preparing the dataset
+### 2. Preparing the dataset
 
 Open terminal / anaconda prompt
 
@@ -216,7 +215,7 @@ python partition_dataset.py -x -i [PATH_TO_IMAGES_FOLDER] -r 0.1
 
 This will partition our data with the ratio of 90% train data and 10% test data
 
-### Create Label Map
+### 3. Create Label Map
 
 TensorFlow requires a label map, which namely maps each of the used labels to an integer values. This label map is used both by the training and detection processes.
 
@@ -236,7 +235,7 @@ item {
 
 *assume renzo and adriano are two different person
 
-### Create TensorFlow Records
+### 4. Create TensorFlow Records
 
 * Click here to download the above script and save it inside `TensorFlow/scripts/preprocessing`.
 * Install the pandas package:
@@ -262,7 +261,7 @@ python generate_tfrecord.py -x [PATH_TO_IMAGES_FOLDER]/test -l [PATH_TO_ANNOTATI
 # python generate_tfrecord.py -x C:/Users/renzo/Tensorflow/workspace/training_demo/images/train -l C:/Users/renzo/Tensorflow/workspace/training_demo/annotations/label_map.pbtxt -o C:/Users/renzo/Documents/Tensorflow/workspace/training_demo/annotations/test.record
 ```
 
-### Configure the Training Pipeline
+### 5. Configure the Training Pipeline
 
 Now that we have downloaded and extracted our pre-trained model, let’s create a directory for our training job. Under the `training_demo/models` create a new directory named `my_ssd_resnet50_v1_fpn` and copy the `training_demo/pre-trained-models/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/pipeline.config` file inside the newly created directory. Our `training_demo/models` directory should now look like this:
 
@@ -292,7 +291,7 @@ It is worth noting here that the changes to lines 178 to 179 above are optional.
 Once the above changes have been applied to our config file, go ahead and save it.
 
 
-### Training the Model
+### 6. Training the Model
 
 Before we begin training our model, let’s go and copy the `TensorFlow/models/research/object_detection/model_main_tf2.py` script and paste it straight into our  `training_demo` folder. We will need this script in order to train our model.
 
@@ -304,7 +303,7 @@ python model_main_tf2.py --model_dir=models/my_ssd_resnet50_v1_fpn --pipeline_co
 
 Once the training process has been initiated, you should see a series of print outs similar to the one below (plus/minus some warnings):
 
-### Monitor Training Job Progress using TensorBoard
+### 7. Monitor Training Job Progress using TensorBoard
 
 A very nice feature of TensorFlow, is that it allows you to coninuously monitor and visualise a number of different training/evaluation metrics, while your model is being trained. The specific tool that allows us to do all that is Tensorboard.
 To start a new TensorBoard server, we follow the following steps:
@@ -331,7 +330,7 @@ TensorBoard 2.2.2 at http://localhost:6006/ (Press CTRL+C to quit)
 Once this is done, go to your browser and type `http://localhost:6006/` in your address bar, following which you should be presented with a dashboard similar to the one shown below (maybe less populated if your model has just started training):
 
 
-### Exporting a Trained Model
+### 8. Exporting a Trained Model
 
 Once your training job is complete, you need to extract the newly trained inference graph, which will be later used to perform the object detection. This can be done as follows:
 * Copy the `TensorFlow/models/research/object_detection/exporter_main_v2.py` script and paste it straight into your `training_demo` folder.
@@ -354,7 +353,7 @@ training_demo/
 └─ ...
 ```
 
-### Testing the models on video
+### 9. Testing the models on video
 
 * Open the `Testing Scripts` folder from this repo
 
