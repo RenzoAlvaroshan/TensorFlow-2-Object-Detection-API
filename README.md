@@ -143,7 +143,7 @@ training_demo/
 2. Run capture_image.py
 
 ```
-(tensorflow) C:\Users\renzo>python capture_image.py
+python capture_image.py
 ```
 
 3. Capture face images from different angles
@@ -206,7 +206,7 @@ TensorFlow/
 2. Then, cd into TensorFlow/scripts/preprocessing and run:
 
 ```python
-(tensorflow) C:\Users\renzo>python partition_dataset.py -x -i [PATH_TO_IMAGES_FOLDER] -r 0.1
+python partition_dataset.py -x -i [PATH_TO_IMAGES_FOLDER] -r 0.1
 
 # For example
 # python partition_dataset.py -x -i C:/Users/renzo/Tensorflow/workspace/training_demo/images -r 0.1
