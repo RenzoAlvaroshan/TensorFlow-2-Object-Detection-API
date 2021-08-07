@@ -1,8 +1,10 @@
-# TensorFlow-2-Object-Detection-API
+# Creating Face Detector using TensorFlow-2-Object-Detection-API - Guidebook
 
-This is my repository for learning how to use TensorFlow 2 Object Detection API. Starting from creating workspaces (folders), installing packages and libraries, downloading the pre-trained from TensorFlow 2 Model Zoo, and lastly train and test the model using batch image and also videos.
+This is my repository for learning how to create custom Face Detector using TensorFlow 2 Object Detection API. Starting from creating workspaces (folders), installing packages and libraries, downloading the pre-trained from TensorFlow 2 Model Zoo, and lastly train and test the model using batch image and also videos.
 
-Source: https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/index.html
+Reference: 
+Lyudmil Vladimirov
+https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/index.html
 
 
 ## Sample of the result
@@ -351,3 +353,24 @@ training_demo/
 │     └─ pipeline.config
 └─ ...
 ```
+
+### Testing the models on video
+
+* Open the `Testing Scripts` folder from this repo
+
+* Insert the model name with your own exported model
+`ssd_mobilenet_v2`
+
+* Insert video that you want to test, for example
+`renzo.mp4`
+
+* run the following command:
+
+```
+python Object_Detection_Videos.py
+```
+
+Congratulations! 👏
+You have just finished creating your own custom object detector using Tensorflow Object Detection API.
+
+Thank you to all elements that helped me making this guidebook 🙏
