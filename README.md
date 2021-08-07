@@ -1,13 +1,23 @@
-# Creating Face Detector using TensorFlow-2-Object-Detection-API - Guidebook
+# Guide for Creating Face Recognition using TensorFlow 2 Object Detection API
 
-This is my repository for learning how to create custom Face Detector using TensorFlow 2 Object Detection API. Starting from creating workspaces (folders), installing packages and libraries, downloading the pre-trained from TensorFlow 2 Model Zoo, and lastly train and test the model using batch image and also videos.
+This is my repository for learning how to create custom Face Recognition using TensorFlow 2 Object Detection API. Starting from creating workspaces (folders), installing packages and libraries, downloading the pre-trained from TensorFlow 2 Model Zoo, and finally, train and test the model using batch images and videos.
 
 Reference: 
-Lyudmil Vladimirov
-https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/index.html
 
+Lyudmil Vladimirov (https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/index.html)
 
-## Sample of the result
+---
+
+Outline:
+
+* Sample of Result
+* Installation
+* Training Custom Object Detector
+* Testing the Models on Video
+
+---
+
+## A. Sample of Result
 Taken using Logitech Brio 4K Pro
 
 Image:
@@ -20,23 +30,22 @@ Video:
 https://user-images.githubusercontent.com/55566616/126886984-cc2fdf0b-5752-4a7e-980e-63783f4612da.mp4
 
 
-## Installation
+## B. Installation
 
 ### 1. Create a new Anaconda virtual environment
 
-Open a new Terminal window
-Type the following command:
+Open a new Terminal window and type the following command:
 
 ```
-C:\Users\renzo>conda create -n tensorflow pip python=3.8
+(base) C:\Users\renzo> conda create -n tensorflow pip python=3.8
 ```
 
-The above will create a new virtual environment with name tensorflow
+The above will create a new virtual environment with name `tensorflow`.
 
 ### 2. Activate the Anaconda virtual environment
 
 ```
-C:\Users\renzo>conda activate tensorflow
+(base) C:\Users\renzo> conda activate tensorflow
 ```
 
 Once you have activated your virtual environment, the name of the environment should be displayed within brackets at the beggining of your cmd path specifier, e.g.:
@@ -45,21 +54,22 @@ Once you have activated your virtual environment, the name of the environment sh
 (tensorflow) C:\Users\renzo>
 ```
 
-TensorFlow Installation
+### 3. TensorFlow Installation:
 
 ```
-pip install --ignore-installed --upgrade tensorflow==2.4.0
+(tensorflow) C:\Users\renzo> pip install --ignore-installed --upgrade tensorflow==2.4.0
 ```
 
-TensorFlow Object Detection API Installation
+### 4. TensorFlow Object Detection API Installation
 
-1. Create a new folder under a path of your choice and name it TensorFlow
+#### (1) Create a new folder under a path of your choice and name it TensorFlow
 
-Downloading the TensorFlow Model Garden
-* Create a new folder under a path of your choice and name it TensorFlow. (e.g. C:\Users\renzo\TensorFlow).
-* From your Terminal cd into the TensorFlow directory.
-* To download the models you can either use Git to clone the TensorFlow Models repository inside the TensorFlow folder, or you can simply download it as a ZIP and extract its contents inside the TensorFlow folder. To keep things consistent, in the latter case you will have to rename the extracted folder models-master to models.
-* You should now have a single folder named models under your TensorFlow folder, which contains another 4 folders as such:
+#### (2) Downloading the TensorFlow Model Garden
+
+* Create a new folder under a path of your choice and name it TensorFlow. (e.g., `C:\Users\renzo\TensorFlow`).
+* From your Terminal `cd` into `TensorFlow` directory.
+* To download the models, you can either use Git to clone the TensorFlow Models repository inside `TensorFlow` folder, or you can simply download it as a zipped file and extract its contents inside `TensorFlow` folder. To keep things consistent, in the latter case you will have to rename the extracted folder `models-master` to `models`.
+* You should now have a single folder named `models` under your `TensorFlow` folder, which contains another 4 folders, such as:
 
 ```
 TensorFlow/
@@ -67,30 +77,31 @@ TensorFlow/
    ├─ community/
    ├─ official/
    ├─ orbit/
-   ├─ research/
-   └── ...
+   └─ research/
 ```
 
-### 3. Protobuf Installation/Compilation
+### 5. Protobuf Installation/Compilation
 
 * Head to the protoc releases page
-* Download the latest protoc-*-*.zip release (e.g. protoc-3.12.3-win64.zip for 64-bit Windows)
-* Extract the contents of the downloaded protoc-*-*.zip in a directory <PATH_TO_PB> of your choice (e.g. C:\Program Files\Google Protobuf)
-* Add <PATH_TO_PB>\bin to your Path environment variable (see Environment Setup)
-* In a new Terminal 1, cd into TensorFlow/models/research/ directory and run the following command:
+* Download the latest `protoc-*-*.zip` release (e.g., `protoc-3.12.3-win64.zip` for 64-bit Windows)
+* Extract the contents of the downloaded `protoc-*-*.zip` in a directory `<PATH_TO_PB>` of your choice (e.g., `C:\Program Files\Google Protobuf`)
+* Add `<PATH_TO_PB>\bin` to your Path environment variable (see Environment Setup)
+* In a new Terminal, `cd` into `TensorFlow/models/research/` directory and run the following command:
 
 ```python
-protoc object_detection/protos/*.proto --python_out=.
+(tensorflow) C:\Users\renzo\TensorFlow\models\research\> protoc object_detection/protos/*.proto --python_out=.
 ```
 
 COCO API installation
 
 ```python
-(tensorflow) C:\Users\renzo>pip install cython
-(tensorflow) C:\Users\renzo>pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
+(tensorflow) C:\Users\renzo> pip install cython
+(tensorflow) C:\Users\renzo> pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 ```
 
-### 4. Install the Object Detection API
+### 6. Install the Object Detection API
+
+#### (1) Install Object Detection API using the following script:
 
 ```python
 # From within TensorFlow/models/research/
@@ -98,15 +109,16 @@ cp object_detection/packages/tf2/setup.py .
 python -m pip install --use-feature=2020-resolver .
 ```
 
-Test your Installation
-To test the installation, run the following command from within Tensorflow\models\research:
+#### (2) Test your Installation
+
+To test the installation, run the following script from within `Tensorflow\models\research`:
 
 ```python
 # From within TensorFlow/models/research/
 python object_detection/builders/model_builder_tf2_test.py
 ```
 
-## Training Custom Object Detector
+## C. Training Custom Object Detector
 
 create a new folder under TensorFlow and call it workspace. It is within the workspace that we will store all our training set-ups. Now let’s go under workspace and create another folder named training_demo. Now our directory structure should be as so:
 
@@ -353,7 +365,7 @@ training_demo/
 └─ ...
 ```
 
-### 9. Testing the models on video
+## D. Testing the Models on Video
 
 * Open the `Testing Scripts` folder from this repo
 
@@ -376,3 +388,7 @@ Congratulations! 👏
 You have just finished creating your own custom object detector using Tensorflow Object Detection API.
 
 Thank you to all people that helped me making this guidebook 🙏
+
+Have a nice day! 😁
+
+~ (Renzo Adriano Alvaroshan)
