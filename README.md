@@ -92,21 +92,25 @@ TensorFlow/
 (tensorflow) C:\Users\renzo\TensorFlow\models\research\> protoc object_detection/protos/*.proto --python_out=.
 ```
 
-COCO API installation
+### 6. COCO API installation
+
+Run the following command to install `pycocotools` with Windows support:
 
 ```python
 (tensorflow) C:\Users\renzo> pip install cython
 (tensorflow) C:\Users\renzo> pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 ```
 
-### 6. Install the Object Detection API
+### 7. Install the Object Detection API
+
+Installation of the Object Detection API is achieved by installing the `object_detection` package. This is done by running the following commands from within `Tensorflow\models\research`:
 
 #### (1) Install Object Detection API using the following script:
 
 ```python
 # From within TensorFlow/models/research/
-cp object_detection/packages/tf2/setup.py .
-python -m pip install --use-feature=2020-resolver .
+(tensorflow) C:\Users\renzo\TensorFlow\models\research\> cp object_detection/packages/tf2/setup.py .
+(tensorflow) C:\Users\renzo\TensorFlow\models\research\> python -m pip install --use-feature=2020-resolver .
 ```
 
 #### (2) Test your Installation
@@ -115,7 +119,7 @@ To test the installation, run the following script from within `Tensorflow\model
 
 ```python
 # From within TensorFlow/models/research/
-python object_detection/builders/model_builder_tf2_test.py
+(tensorflow) C:\Users\renzo\TensorFlow\models\research\> python object_detection/builders/model_builder_tf2_test.py
 ```
 
 ## C. Training Custom Object Detector
@@ -130,13 +134,12 @@ TensorFlow/
 │  ├─ community/
 │  ├─ official/
 │  ├─ orbit/
-│  ├─ research/
-│  └─ ...
+│  └─ research/
 └─ workspace/
    └─ training_demo/
 ```
 
-The training_demo folder shall be our training folder, which will contain all files related to our model training. It is advisable to create a separate training folder each time we wish to train on a different dataset. The typical structure for training folders is shown below.
+The `training_demo` folder shall be our training folder, which will contain all files related to our model training. It is advisable to create a separate training folder each time we wish to train on a different dataset. The typical structure for training folders is shown below.
 
 ```
 training_demo/
@@ -150,16 +153,29 @@ training_demo/
 └─ README.md
 ```
 
-### 1. Capturing images
+### 1. Capturing Images
 
-1. Prepare your webcamera (e.g. Logitech Brio 4K Pro)
-2. Run capture_image.py
+#### (1) Prepare Webcamera
+
+Prepare your webcamera. Please note that the camera should have a minimum resolution of 720 dpi (1280 x 720 pixels). In my work, I use Logitech Brio 4K Pro (set at 1920 x 1080 pixels).
+
+![https://m.media-amazon.com/images/I/810l+GhdjOL._AC_SS450_.jpg](https://user-images.githubusercontent.com/55566616/128616234-d45228ca-d80d-4a82-a223-648ada2189b6.png)
+
+#### (2) Download `capture_image.py` Script
+
+Download [`capture_image.py`](https://github.com/RenzoAlvaroshan/TensorFlow-2-Object-Detection-API/blob/main/Capture%20Image%20and%20Video%20files/capture_image.py) and then run the script to access your camera from computer.
 
 ```
-python capture_image.py
+(tensorflow) C:\Users\renzo> python capture_image.py
 ```
 
-3. Capture face images from different angles
+Hit <Spacebar> to capture images.
+
+Upon finish capturing, hit <Escape> button to exit from capture_image.py.
+
+#### (3) Capture Face Images
+
+Capture face images from different angles.
 
 ![renzo_logitech_60_65](https://user-images.githubusercontent.com/55566616/128579829-88d9fe33-fb1d-432d-b43a-4d2ba037e853.jpeg)
 
@@ -167,37 +183,46 @@ python capture_image.py
 
 ![renzo_logitech_15_90](https://user-images.githubusercontent.com/55566616/128579877-05c4cd1c-4f9a-4727-a6d9-c1de894bd7d3.jpeg)
 
-I captured from 0° - 180° with the interval 5° horizontally and 0° - 60° with the interval 5° vertically
-in total we can get 431 pictures
+To capture the images, I am using view angles within the range of 0°-180° with an interval 5° horizontally, and the range of 0°-60° with an interval 5° vertically.
+In total we can have 431 pictures.
 
-Save it into your images folder
+Save it into your images folder.
 
-### 2. Preparing the dataset
+### 2. Preparing Dataset
 
 Open terminal / anaconda prompt
 
-1. Download labelImg
+#### (1) Install `labelImg` App
+
+Install `labelImg` app using `pip` package manager with the following command:
 
 ```
-(tensorflow) C:\Users\renzo>pip install labelImg
+(tensorflow) C:\Users\renzo> pip install labelImg
 ```
 
-run labelimg using this command:
+#### (2) Run `labelimg` App
+
+Run `labelimg` using the following command:
 
 ```
-(tensorflow) C:\Users\renzo>labelImg
+(tensorflow) C:\Users\renzo> labelImg
 ```
 
-2. Annotate the faces in your image one by one and give the face a name (choose pascal voc format)
-(I recommend you using macro for faster process of labeling images)
+#### (3) Annotate Captured Images
+
+Annotate the faces in your image files one by one and give the face a label name (choose `Pascal/VOC` format)
+
+I would recommend to use a macro or script for faster process of image labelling
 
 <img width="1101" alt="Screen Shot 2021-08-07 at 05 26 27" src="https://user-images.githubusercontent.com/55566616/128579899-129a233b-df58-4619-9a43-3a3565620a06.png">
 
-3. Save all you `.jpg` and `.xml` into the same folder
+#### (4) Save Image Files
 
-Partition the Dataset
+Save all you `.jpg` and `.xml` files into the same folder
 
-To make things even tidier, let’s create a new folder TensorFlow/scripts/preprocessing, where we shall store scripts that we can use to preprocess our training inputs. Below is out TensorFlow directory tree structure, up to now:
+### 3. Partition Dataset
+
+To make things even tidier, let’s create a new folder `TensorFlow/scripts/preprocessing`, where we shall store scripts that we can use to preprocess our training inputs. Below is out TensorFlow directory tree structure, up to now:
 
 ```
 TensorFlow/
@@ -215,23 +240,28 @@ TensorFlow/
    └─ training_demo/
 ```
 
-1. Download the partition data set script here
-2. Then, cd into TensorFlow/scripts/preprocessing and run:
+#### (1) Download Partition Data Set Script
+
+Download the partition data set script [here](https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/_downloads/d0e545609c5f7f49f39abc7b6a38cec3/partition_dataset.py) 👈
+
+#### (2) Run `partition_dataset.py` Script
+
+Then, `cd` into `TensorFlow/scripts/preprocessing` and run:
 
 ```python
-python partition_dataset.py -x -i [PATH_TO_IMAGES_FOLDER] -r 0.1
+(tensorflow) C:\Users\renzo\TensorFlow\scripts\preprocessing> python partition_dataset.py -x -i [PATH_TO_IMAGES_FOLDER] -r 0.1
 
 # For example
 # python partition_dataset.py -x -i C:/Users/renzo/Tensorflow/workspace/training_demo/images -r 0.1
 ```
 
-This will partition our data with the ratio of 90% train data and 10% test data
+This will partition our data with the ratio of 90% train data and 10% test data.
 
 ### 3. Create Label Map
 
-TensorFlow requires a label map, which namely maps each of the used labels to an integer values. This label map is used both by the training and detection processes.
+TensorFlow requires a label map, which namely maps each of the used labels to an integer values. This label map is used by  both training and detection processes.
 
-Below we show an example label map (e.g label_map.pbtxt), assuming that our dataset contains 2 labels (person name), renzo and adriano:
+Below we show an example label map (e.g., `label_map.pbtxt`), assuming that our dataset contains 2 labels (person name), `renzo` and `adriano`:
 
 ```
 item {
@@ -245,7 +275,7 @@ item {
 }
 ```
 
-*assume renzo and adriano are two different person
+*Assuming `renzo` and `adriano` are two different persons
 
 ### 4. Create TensorFlow Records
 
@@ -253,12 +283,12 @@ item {
 * Install the pandas package:
 
 ```
-conda install pandas # Anaconda
-                     # or
-pip install pandas   # pip
+(tensorflow) C:\Users\renzo\TensorFlow/scripts/preprocessing> conda install pandas  # Anaconda
+                                                                                    # or
+(tensorflow) C:\Users\renzo\TensorFlow/scripts/preprocessing> pip install pandas    # pip
 ```
 
-Finally, cd into TensorFlow/scripts/preprocessing and run:
+Finally, cd into `TensorFlow/scripts/preprocessing` and run:
 
 ```python
 # Create train data:
@@ -286,7 +316,7 @@ training_demo/
 └─ ...
 ```
 
-Now, let’s have a look at the changes that we shall need to apply to the pipeline.config file (highlighted in yellow):
+Now, let’s have a look at the changes that we shall need to apply to the `pipeline.config` file (highlighted in yellow):
 
 <img width="697" alt="fixed_shape_resizer" src="https://user-images.githubusercontent.com/55566616/128580374-a2b03518-386e-4d23-b14b-4dca93ec59c9.png">
 
@@ -302,12 +332,11 @@ Now, let’s have a look at the changes that we shall need to apply to the pipel
 It is worth noting here that the changes to lines 178 to 179 above are optional. These should only be used if you installed the COCO evaluation tools, as outlined in the COCO API installation section, and you intend to run evaluation (see Evaluating the Model (Optional)).
 Once the above changes have been applied to our config file, go ahead and save it.
 
-
 ### 6. Training the Model
 
 Before we begin training our model, let’s go and copy the `TensorFlow/models/research/object_detection/model_main_tf2.py` script and paste it straight into our  `training_demo` folder. We will need this script in order to train our model.
 
-Now, to initiate a new training job, open a new Terminal, cd inside the training_demo folder and run the following command:
+Now, to initiate a new training job, open a new Terminal, `cd` inside the `training_demo` folder and run the following command:
 
 ```python
 python model_main_tf2.py --model_dir=models/my_ssd_resnet50_v1_fpn --pipeline_config_path=models/my_ssd_resnet50_v1_fpn/pipeline.config
@@ -315,12 +344,32 @@ python model_main_tf2.py --model_dir=models/my_ssd_resnet50_v1_fpn --pipeline_co
 
 Once the training process has been initiated, you should see a series of print outs similar to the one below (plus/minus some warnings):
 
+```
+...
+WARNING:tensorflow:Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.gamma
+W0716 05:24:19.105542  1364 util.py:143] Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.gamma
+WARNING:tensorflow:Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.beta
+W0716 05:24:19.106541  1364 util.py:143] Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.beta
+WARNING:tensorflow:Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.moving_mean
+W0716 05:24:19.107540  1364 util.py:143] Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.moving_mean
+WARNING:tensorflow:Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.moving_variance
+W0716 05:24:19.108539  1364 util.py:143] Unresolved object in checkpoint: (root).model._box_predictor._base_tower_layers_for_heads.class_predictions_with_background.4.10.moving_variance
+WARNING:tensorflow:A checkpoint was restored (e.g. tf.train.Checkpoint.restore or tf.keras.Model.load_weights) but not all checkpointed values were used. See above for specific issues. Use expect_partial() on the load status object, e.g. tf.train.Checkpoint.restore(...).expect_partial(), to silence these warnings, or use assert_consumed() to make the check explicit. See https://www.tensorflow.org/guide/checkpoint#loading_mechanics for details.
+W0716 05:24:19.108539  1364 util.py:151] A checkpoint was restored (e.g. tf.train.Checkpoint.restore or tf.keras.Model.load_weights) but not all checkpointed values were used. See above for specific issues. Use expect_partial() on the load status object, e.g. tf.train.Checkpoint.restore(...).expect_partial(), to silence these warnings, or use assert_consumed() to make the check explicit. See https://www.tensorflow.org/guide/checkpoint#loading_mechanics for details.
+WARNING:tensorflow:num_readers has been reduced to 1 to match input file shards.
+INFO:tensorflow:Step 100 per-step time 1.153s loss=0.761
+I0716 05:26:55.879558  1364 model_lib_v2.py:632] Step 100 per-step time 1.153s loss=0.761
+...
+```
+
 ### 7. Monitor Training Job Progress using TensorBoard
 
 A very nice feature of TensorFlow, is that it allows you to coninuously monitor and visualise a number of different training/evaluation metrics, while your model is being trained. The specific tool that allows us to do all that is Tensorboard.
-To start a new TensorBoard server, we follow the following steps:
+
+   To start a new TensorBoard server, we follow the following steps:
+   
 * Open a new Anaconda/Command Prompt
-* Activate your TensorFlow conda environment (if you have one), e.g.:
+* Activate your TensorFlow conda environment (if you have one), e.g.,:
 
 ```
 activate tensorflow_gpu
@@ -336,17 +385,18 @@ The above command will start a new TensorBoard server, which (by default) listen
 
 ```
 ...
-TensorBoard 2.2.2 at http://localhost:6006/ (Press CTRL+C to quit)
+TensorBoard 2.2.2 at http://localhost:6006/ (Press `<Ctrl-C>` to quit)
 ```
 
 Once this is done, go to your browser and type `http://localhost:6006/` in your address bar, following which you should be presented with a dashboard similar to the one shown below (maybe less populated if your model has just started training):
 
 
-### 8. Exporting a Trained Model
+### 8. Export a Trained Model
 
 Once your training job is complete, you need to extract the newly trained inference graph, which will be later used to perform the object detection. This can be done as follows:
+   
 * Copy the `TensorFlow/models/research/object_detection/exporter_main_v2.py` script and paste it straight into your `training_demo` folder.
-* Now, open a Terminal, `cd` inside your training_demo folder, and run the following command:
+* Now, open a Terminal, `cd` inside your `training_demo` folder, and run the following command:
 
 ```
 python .\exporter_main_v2.py --input_type image_tensor --pipeline_config_path .\models\my_efficientdet_d1\pipeline.config --trained_checkpoint_dir .\models\my_efficientdet_d1\ --output_directory .\exported-models\my_model
@@ -369,13 +419,11 @@ training_demo/
 
 * Open the `Testing Scripts` folder from this repo
 
-* Insert the model name with your own exported model
-`ssd_mobilenet_v2`
+* Insert the model name with your own exported model `ssd_mobilenet_v2`
 
-* Insert video that you want to test, for example
-`renzo.mp4`
+* Insert video that you want to test, for example `renzo.mp4`
 
-* run the following command:
+* Run the following command:
 
 ```
 python Object_Detection_Videos.py
@@ -383,11 +431,11 @@ python Object_Detection_Videos.py
 
 Now you can see the result like the sample result above.
 
-Congratulations! 👏
+DONE…!
+   
+Congratulations! 👏 You have just finished creating your own custom object recognition using Tensorflow Object Detection API.
 
-You have just finished creating your own custom object detector using Tensorflow Object Detection API.
-
-Thank you to all people that helped me making this guidebook 🙏
+(Thank you to all people that helped me making this guidebook 🙏)
 
 Have a nice day! 😁
 
